@@ -23,7 +23,7 @@
 
 class GyverNTC {
 public:
-    GyverNTC(byte pin, int resistance, int beta, int tempBase = 25, int resistBase = 10000) :
+    GyverNTC(byte pin, long resistance, int beta, int tempBase = 25, long resistBase = 10000) :
     _pin(pin), _resistance(resistance), _beta(beta), _tempBase(tempBase), _resistBase(resistBase) {}
     
     // прочитать температуру с пина
@@ -49,7 +49,7 @@ private:
     const byte _pin = 0;
     const int _beta = 0;
     const int _tempBase = 25;
-    const int _resistance = 10000;
-    const int _resistBase = 10000;
+    const long _resistance = 10000;
+    const long _resistBase = 10000;
 };
 #endif
