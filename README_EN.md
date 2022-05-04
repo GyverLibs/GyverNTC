@@ -1,3 +1,5 @@
+This is an automatic translation, may be incorrect in some places. See sources and examples!
+
 # GyverNTC
 Library for working with NTC thermistors according to the Steinhart-Hart law
 - Setting the parameters of the thermistor
