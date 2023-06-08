@@ -15,41 +15,62 @@
     v1.0 - релиз
     v1.1 - небольшая оптимизация, повышение точности
     v1.2 - оптимизация, поддержка 100к термисторов
+    v1.3 - поддержка АЦП с разной битностью
 */
 
 #ifndef _GyverNTC_h
 #define _GyverNTC_h
 #include <Arduino.h>
-#define _T_SAMPLE_AVERAGE 20   // количество чтений для усреднения
 
 class GyverNTC {
 public:
-    GyverNTC(uint8_t pin, uint32_t resistance, uint16_t beta, uint8_t tempBase = 25, uint32_t base = 10000) :
-    _pin(pin), _beta(beta), _tempBase(tempBase), _baseDivRes((float)base / resistance) {}
+    // подключение: GND --- Rt --- ADC --- R --- VCC
+    
+    GyverNTC() {}
+    
+    // пин, R резистора, B термистора, t термистора, R термистора, разрешение АЦП
+    GyverNTC(uint8_t pin, uint32_t R, uint16_t B, uint8_t t = 25, uint32_t Rt = 10000, uint8_t res = 10) {
+        config(R, B, t, Rt);
+        setPin(pin, res);
+    }
+    
+    // настроить термистор: R резистора, B термистора, t термистора, R термистора
+    void config(uint32_t R, uint16_t B, uint8_t t = 25, uint32_t Rt = 10000) {
+        _beta = B;
+        _tempBase = t;
+        _baseDivRes = (float)Rt / R;
+    }
+    
+    // настроить пин и разрешение АЦП
+    void setPin(uint8_t pin, uint8_t res = 10) {
+        _pin = pin;
+        _res = res;
+    }
     
     // прочитать температуру с пина
     float getTemp() {
-        return computeTemp(analogRead(_pin));
+        return computeTemp(analogRead(_pin), _res);
     }
     
-    // прочитать усреднённую температуру с пина
-    float getTempAverage() {
+    // прочитать усреднённую температуру с пина, можно указать к-во усреднений
+    float getTempAverage(uint8_t samples = 20) {
         uint16_t aver = 0;
-        for (uint8_t i = 0; i < _T_SAMPLE_AVERAGE; i++) aver += analogRead(_pin);
-        return computeTemp((float)aver / _T_SAMPLE_AVERAGE);
+        for (uint8_t i = 0; i < samples; i++) aver += analogRead(_pin);
+        return computeTemp((float)aver / samples, _res);
     }
     
-    // получить температуру из сигнала АЦП (10 бит, float)
-    float computeTemp(float analog) {
-        analog = _baseDivRes / (1023.0f / analog - 1.0);
-        analog = (log(analog) / _beta) + 1.0 / (_tempBase + 273.15);
-        return (1.0 / analog - 273.15);
+    // получить температуру из сигнала АЦП, можно указать разрешение АЦП
+    float computeTemp(float analog, uint8_t res = 10) {
+        analog = _baseDivRes / ((float)((1 << res) - 1) / analog - 1.0f);
+        analog = (log(analog) / _beta) + 1.0f / (_tempBase + 273.15f);
+        return (1.0f / analog - 273.15f);
     }
     
-private:    
-    const uint8_t _pin = 0;
-    const uint16_t _beta = 0;
-    const uint8_t _tempBase = 25;
-    const float _baseDivRes;
+private:
+    uint8_t _res = 10;
+    uint8_t _pin = 0;
+    uint16_t _beta = 3435;
+    uint8_t _tempBase = 25;
+    float _baseDivRes = 1.0;
 };
 #endif
