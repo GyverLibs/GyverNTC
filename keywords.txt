@@ -16,6 +16,7 @@ getTempAverage	KEYWORD2
 computeTemp	KEYWORD2
 config	KEYWORD2
 setPin	KEYWORD2
+NTC_compute	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
