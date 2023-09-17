@@ -62,6 +62,8 @@ GyverNTC therm(uint8_t pin, uint32_t R, uint16_t B, uint8_t t = 25, uint32_t Rt 
 
 <a id="usage"></a>
 ## Использование
+### Класс
+
 ```cpp
 // настроить термистор: R резистора, B термистора, t термистора, R термистора
 void config(uint32_t R, uint16_t B, uint8_t t = 25, uint32_t Rt = 10000);
@@ -77,6 +79,16 @@ float getTempAverage(uint8_t samples = 20);
 
 // получить температуру из сигнала АЦП, можно указать разрешение АЦП
 float computeTemp(float analog, uint8_t res = 10);
+```
+
+### Прямой расчёт
+
+```cpp
+// сигнал АЦП, (R резистора / R термистора), B термистора, t термистора, разрешение АЦП
+float NTC_compute(float analog, float baseDiv, uint16_t B, uint8_t t = 25, uint8_t res = 10);
+
+// сигнал АЦП, R резистора, B термистора, t термистора, R термистора, разрешение АЦП
+float NTC_compute(float analog, uint32_t R, uint16_t B, uint8_t t = 25, uint32_t Rt = 10000, uint8_t res = 10);
 ```
 
 <a id="example"></a>
@@ -132,6 +144,7 @@ void loop() {
 - v1.2 - оптимизация, поддержка 100к термисторов
 - v1.3 - поддержка разного разрешения АЦП
 - v1.4 - исправлена критическая ошибка!
+- v1.5 - добавлена отдельная функция для расчёта
 
 <a id="feedback"></a>
 ## Баги и обратная связь
