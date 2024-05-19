@@ -2,7 +2,7 @@
 
 // сигнал АЦП, (R резистора / R термистора), B термистора, t термистора, разрешение АЦП
 float NTC_compute(float analog, float baseDiv, uint16_t B, uint8_t t, uint8_t res) {
-    if (analog == 0) analog = 0.5f;
+    if (analog <= 0 || isnan(analog)) return INFINITY;
     analog = baseDiv / ((float)((1 << res) - 1) / analog - 1.0f);
     analog = (log(analog) / B) + 1.0f / (t + 273.15f);
     return (1.0f / analog - 273.15f);
