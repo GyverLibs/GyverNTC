@@ -26,7 +26,7 @@
 
 // вычисление без класса, не хранит константы в памяти
 // сигнал АЦП, (R резистора / R термистора), B термистора, t термистора, разрешение АЦП
-float NTC_compute(float analog, float baseDiv, uint16_t B, uint8_t t = 25, uint8_t res = 10);
+float NTC_computeRR(float analog, float baseDiv, uint16_t B, uint8_t t = 25, uint8_t res = 10);
 
 // сигнал АЦП, R резистора, B термистора, t термистора, R термистора, разрешение АЦП
 float NTC_compute(float analog, uint32_t R, uint16_t B, uint8_t t = 25, uint32_t Rt = 10000, uint8_t res = 10);
@@ -70,7 +70,7 @@ class GyverNTC {
 
     // получить температуру из сигнала АЦП, можно указать разрешение АЦП
     float computeTemp(float analog, uint8_t res = 10) {
-        return NTC_compute(analog, _baseDivRes, _beta, _tempBase, res);
+        return NTC_computeRR(analog, _baseDivRes, _beta, _tempBase, res);
     }
 
    private:
