@@ -71,7 +71,7 @@ float computeTemp(float analog, uint8_t res = 10);
 
 ```cpp
 // ADC signal, (R resistor/R thermistor), B thermistor, t thermistor, ADC resolution
-float NTC_compute(float analog, float baseDiv, uint16_t B, uint8_t t = 25, uint8_t res = 10);
+float NTC_computeRR(float analog, float baseDiv, uint16_t B, uint8_t t = 25, uint8_t res = 10);
 
 // ADC signal, R resistor, B thermistor, t thermistor, R thermistor, ADC resolution
 float NTC_compute(float analog, uint32_t R, uint16_t B, uint8_t t = 25, uint32_t Rt = 10000, uint8_t res = 10);
